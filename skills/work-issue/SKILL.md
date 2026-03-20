@@ -18,6 +18,11 @@ If the issue has a "Blocked by" section, verify each blocker is
 closed. If any blocker is still open, STOP and tell the user which
 issues need to be resolved first.
 
+Assign the issue to the current user:
+```
+gh issue edit <number> --add-assignee @me
+```
+
 ### 2. Understand the context
 - Read the issue thoroughly, including any linked parent PRD.
 - Explore the codebase to understand the areas that need to change.
