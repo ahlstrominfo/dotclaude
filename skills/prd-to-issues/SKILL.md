@@ -80,4 +80,16 @@ Reference by number from the parent PRD:
 - User story 7
 </issue-template>
 
-Do NOT close or modify the parent PRD issue.
+### 6. Update the parent PRD
+Add a comment to the parent PRD issue listing all created child
+issues with their dependency relationships:
+```
+gh issue comment <prd-number> --body "## Implementation Issues
+
+- #10 Set up database schema (ready)
+- #11 Add API endpoint (blocked by #10)
+- #12 Frontend form (blocked by #10, #11)
+"
+```
+
+Do NOT close the parent PRD issue.
