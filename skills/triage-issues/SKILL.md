@@ -14,12 +14,18 @@ their status against reality, and recommend what to work on next.
 Ask the user for the parent PRD issue number (or a milestone/label
 to filter by). Fetch the PRD with `gh issue view <number>`.
 
-Find all child issues that reference the PRD. Use:
+Fetch sub-issues of the PRD using the GraphQL API:
 ```
-gh issue list --search "\"Parent PRD\" #<prd-number>" --state all --json number,title,state,labels
+gh api graphql -f query='query {
+  repository(owner: "<owner>", name: "<repo>") {
+    issue(number: <prd-number>) {
+      subIssues(first: 100) {
+        nodes { number title state labels(first: 10) { nodes { name } } }
+      }
+    }
+  }
+}'
 ```
-If that misses issues, also check the PRD body and comments for
-issue references.
 
 ### 2. Fetch dependency status
 For each child issue, fetch it with `gh issue view <number>` and
