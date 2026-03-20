@@ -51,15 +51,12 @@ Ask the user:
 
 Iterate until the user approves the breakdown.
 
-### 5. Create the GitHub issues
+### 5. Create the GitHub issues as sub-issues
 For each approved slice, create using `gh issue create`.
 Create in dependency order (blockers first) so you can reference
 real issue numbers.
 
 <issue-template>
-## Parent PRD
-#<prd-issue-number>
-
 ## What to build
 A concise description of this vertical slice. Describe the
 end-to-end behavior, not layer-by-layer implementation.
@@ -80,16 +77,32 @@ Reference by number from the parent PRD:
 - User story 7
 </issue-template>
 
-### 6. Update the parent PRD
-Add a comment to the parent PRD issue listing all created child
-issues with their dependency relationships:
-```
-gh issue comment <prd-number> --body "## Implementation Issues
+### 6. Link as sub-issues
+After creating each issue, link it as a sub-issue of the PRD
+using the GitHub GraphQL API.
 
-- #10 Set up database schema (ready)
-- #11 Add API endpoint (blocked by #10)
-- #12 Frontend form (blocked by #10, #11)
-"
+First, get the node IDs:
 ```
+gh api graphql -f query='query {
+  repository(owner: "<owner>", name: "<repo>") {
+    issue(number: <prd-number>) { id }
+  }
+}'
+```
+
+Then for each child issue, add it as a sub-issue:
+```
+gh api graphql -f query='mutation {
+  addSubIssue(input: {
+    issueId: "<parent-node-id>"
+    subIssueId: "<child-node-id>"
+  }) {
+    issue { id }
+  }
+}'
+```
+
+This gives the PRD a native sub-issue list in GitHub's UI —
+no manual tracking needed.
 
 Do NOT close the parent PRD issue.
