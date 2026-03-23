@@ -5,59 +5,60 @@ description: Pick up a GitHub issue that has no blocking dependencies and implem
 
 # Work Issue
 
-Pick up a GitHub issue with no unresolved blockers and implement it
-end-to-end: branch, code, test, commit, and open a PR.
+Implement a GitHub issue end-to-end: understand context, branch, code,
+test, and open a PR.
 
 ## Process
 
 ### 1. Identify the issue
-Ask the user for the issue number (or URL). Fetch it with
-`gh issue view <number>`.
+Fetch with `gh issue view <number>`. Verify any "Blocked by" issues
+are closed. Assign to yourself.
 
-If the issue has a "Blocked by" section, verify each blocker is
-closed. If any blocker is still open, STOP and tell the user which
-issues need to be resolved first.
+### 2. Gather context from the parent PRD
+Find the parent PRD reference in the issue body (look for "PRD #NNN",
+"Se PRD #NNN", or similar). Also check sub-issue relationships via
+the GitHub API. Fetch the parent and extract:
+- **Implementation decisions** relevant to this slice
+- **Testing decisions** (what to test, how, prior art)
+- **Out of scope** — so you don't accidentally build it
 
-Assign the issue to the current user:
+Issues often reference specific PRD sections (e.g., "See PRD #7665,
+sections: Tool Definition, Tool Execution"). Follow those pointers —
+they are the design constraints for this slice.
+
+### 3. Learn from sibling issues
+List sub-issues of the parent PRD:
 ```
-gh issue edit <number> --add-assignee @me
-```
-
-### 2. Understand the context
-- Read the issue thoroughly, including any linked parent PRD.
-- Explore the codebase to understand the areas that need to change.
-- If anything in the issue is ambiguous, ask the user to clarify
-  BEFORE writing code. Keep clarification questions focused and
-  batched — don't ask one at a time.
-
-### 3. Plan the implementation
-Write a brief implementation plan covering:
-- Which files will be created or modified
-- The approach for each acceptance criterion
-- Which tests to write
-
-Present the plan to the user. Wait for approval before proceeding.
-
-### 4. Create a branch
-Create a feature branch from the main branch:
-```
-git checkout -b <issue-number>-<short-description>
+gh api graphql -f query='query {
+  repository(owner: "<owner>", name: "<repo>") {
+    issue(number: <prd-number>) {
+      subIssues(first: 50) {
+        nodes { number title state }
+      }
+    }
+  }
+}'
 ```
 
-### 5. Implement
-Work through the acceptance criteria one by one. For each criterion:
-- Write the implementation
-- Write or update tests
-- Verify tests pass
+For closed siblings, find their merged PRs and study the patterns
+they established: naming, file structure, abstractions, test
+approach. Be consistent with what came before — do not reinvent
+patterns or introduce competing abstractions.
 
-Keep commits atomic and focused. Commit after completing each
-meaningful unit of work, not everything at the end.
+### 4. Read referenced code patterns
+Issues and PRDs often point to existing code to follow (e.g.,
+"follow the store pattern like klipparenStore", "reuse SSE
+streaming from Chattis"). Find these references and read that
+code before planning. They are deliberate design constraints.
 
-### 6. Final verification
-- Run the full test suite to catch regressions
-- Review your own diff with `git diff main...HEAD` — look for
-  anything you missed, debug code left in, or unnecessary changes
+### 5. Plan the implementation
+Present a plan covering: files to create/modify, approach per
+acceptance criterion, alignment with PRD decisions and sibling
+patterns, and tests to write. Wait for user approval.
+
+### 6. Implement
+Branch, implement acceptance criteria one by one, write tests,
+verify they pass. Keep commits atomic.
 
 ### 7. Open a PR
-Use the **create-pr** skill to open the pull request. Ensure the
-PR body includes "Closes #<issue-number>" to link it to the issue.
+Use the **create-pr** skill. Include "Closes #<issue-number>".
