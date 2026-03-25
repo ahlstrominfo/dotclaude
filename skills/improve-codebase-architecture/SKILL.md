@@ -27,71 +27,34 @@ Then read the corresponding resource file for backend-specific commands:
 ## Process
 
 ### 1. Explore the codebase
-Use the Agent tool with subagent_type=Explore to navigate the
-codebase naturally. Do NOT follow rigid heuristics - explore
-organically and note where you experience friction:
-
-- Where does understanding one concept require bouncing between
-  many small files?
-- Where are modules so shallow that the interface is nearly as
-  complex as the implementation?
-- Where have pure functions been extracted just for testability,
-  but the real bugs hide in how they're called?
-- Where do tightly-coupled modules create integration risk in the
-  seams between them?
-- Which parts of the codebase are untested, or hard to test?
-
-The friction you encounter IS the signal.
+Use the Agent tool with subagent_type=Explore to navigate organically.
+Note where you experience friction: bouncing between many files,
+shallow modules, tightly-coupled components, untested or hard-to-test
+code.
 
 ### 2. Present candidates
 Present a numbered list of deepening opportunities. For each:
 - Cluster: Which modules/concepts are involved
 - Why they're coupled: Shared types, call patterns, co-ownership
-- Test impact: What existing tests would be replaced by boundary
-  tests
+- Test impact: What existing tests would be replaced by boundary tests
 
-Do NOT propose interfaces yet. Ask the user: "Which of these would
-you like to explore?"
+Do NOT propose interfaces yet. Ask: "Which of these would you like
+to explore?"
 
 ### 3. User picks a candidate
 
 ### 4. Frame the problem space
-Before spawning sub-agents, write a user-facing explanation:
-- The constraints any new interface would need to satisfy
-- The dependencies it would need to rely on
-- A rough illustrative code sketch to ground the constraints
-
-Show this to the user, then immediately proceed to Step 5. The user
-reads while the sub-agents work in parallel.
+Write a user-facing explanation of the constraints, dependencies,
+and a rough illustrative code sketch. Show to user, then immediately
+proceed to Step 5.
 
 ### 5. Design multiple interfaces
-Spawn 3+ sub-agents in parallel. Each must produce a radically
-different interface for the deepened module.
-
-Give each agent a different design constraint:
-- Agent 1: "Minimize the interface - aim for 1-3 entry points max"
-- Agent 2: "Maximize flexibility - support many use cases"
-- Agent 3: "Optimize for the most common caller - make the default
-  case trivial"
-- Agent 4 (if applicable): "Design around the ports & adapters
-  pattern for cross-boundary dependencies"
-
-Each sub-agent outputs:
-1. Interface signature (types, methods, params)
-2. Usage example showing how callers use it
-3. What complexity it hides internally
-4. Dependency strategy
-5. Trade-offs
-
-Present designs sequentially, then compare in prose.
-
-After comparing, give your own recommendation: which design you
-think is strongest and why. If elements from different designs
-would combine well, propose a hybrid. Be opinionated.
+Follow the [interface design agent instructions](../_resources/interface-design-agents.md)
+to spawn parallel sub-agents with different design constraints.
 
 ### 6. User picks an interface (or accepts recommendation)
 
 ### 7. Create work item
 Create a refactor RFC as a work item using the tracker instructions.
-Do NOT ask the user to review before creating - just create it
-and share the identifier.
+Do NOT ask the user to review before creating — just create it and
+share the identifier.
