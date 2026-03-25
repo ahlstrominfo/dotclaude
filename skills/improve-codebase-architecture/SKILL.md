@@ -7,12 +7,22 @@ description: Explore a codebase to find opportunities for architectural improvem
 
 Explore a codebase like an AI would, surface architectural friction,
 discover opportunities for improving testability, and propose
-module-deepening refactors as GitHub issue RFCs.
+module-deepening refactors as work item RFCs.
 
 A deep module (John Ousterhout, "A Philosophy of Software Design")
 has a small interface hiding a large implementation. Deep modules are
 more testable, more AI-navigable, and let you test at the boundary
 instead of inside.
+
+## Tracker selection
+
+If a tracker has not already been chosen in this conversation, ask the
+user which tracker to use: **github**, **jira**, or **local**.
+
+Then read the corresponding resource file for backend-specific commands:
+- GitHub: [tracker-github.md](../_resources/tracker-github.md)
+- Jira: [tracker-jira.md](../_resources/tracker-jira.md)
+- Local: [tracker-local.md](../_resources/tracker-local.md)
 
 ## Process
 
@@ -81,7 +91,7 @@ would combine well, propose a hybrid. Be opinionated.
 
 ### 6. User picks an interface (or accepts recommendation)
 
-### 7. Create GitHub issue
-Create a refactor RFC as a GitHub issue using `gh issue create`.
+### 7. Create work item
+Create a refactor RFC as a work item using the tracker instructions.
 Do NOT ask the user to review before creating - just create it
-and share the URL.
+and share the identifier.

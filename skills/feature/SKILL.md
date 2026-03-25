@@ -9,6 +9,19 @@ Orchestrate the full delivery pipeline for a new feature, from rough
 idea to merged pull requests. This skill guides the user through each
 phase, invoking the appropriate skill at each step.
 
+## Tracker selection
+
+Before starting, ask the user which tracker to use: **github**,
+**jira**, or **local**.
+
+Read the corresponding resource file for backend-specific commands:
+- GitHub: [tracker-github.md](../_resources/tracker-github.md)
+- Jira: [tracker-jira.md](../_resources/tracker-jira.md)
+- Local: [tracker-local.md](../_resources/tracker-local.md)
+
+Carry this choice forward through all phases — do NOT ask again when
+invoking sub-skills. Tell each sub-skill which tracker is in use.
+
 ## Pipeline
 
 ### Phase 1: Design Interrogation
@@ -22,29 +35,28 @@ proceed to Phase 2.
 ### Phase 2: PRD Creation
 Use the **write-a-prd** skill to formalize the design into a PRD.
 This will interview the user further, explore the codebase, sketch
-modules, and submit the PRD as a GitHub issue.
+modules, and create the PRD as a work item.
 
-When the PRD issue is created, note the issue number and proceed
-to Phase 3.
+When the PRD is created, note its identifier and proceed to Phase 3.
 
-### Phase 3: Issue Breakdown
+### Phase 3: Work Item Breakdown
 Use the **prd-to-issues** skill to break the PRD into vertical
-slice issues. This will draft thin end-to-end slices, quiz the user
-on the breakdown, and create the GitHub issues in dependency order.
+slice work items. This will draft thin end-to-end slices, quiz the
+user on the breakdown, and create the items in dependency order.
 
-When all issues are created, proceed to Phase 4.
+When all items are created, proceed to Phase 4.
 
 ### Phase 4: Triage and Work Loop
-This is the iterative phase. Repeat until all issues are closed:
+This is the iterative phase. Repeat until all items are done:
 
 1. Use the **triage-issues** skill to review the dependency graph,
-   update labels, and identify which issues are ready to work on.
+   update statuses, and identify which items are ready to work on.
 
-2. When a ready issue is identified, use the **work-issue** skill
+2. When a ready item is identified, use the **work-issue** skill
    to implement it — branch, code, test, commit, and open a PR.
 
 3. After the PR is opened, loop back to step 1 to re-triage.
-   Completing one issue may unblock others.
+   Completing one item may unblock others.
 
 ## Guidelines
 
@@ -54,8 +66,8 @@ This is the iterative phase. Repeat until all issues are closed:
   summarize what was accomplished and confirm with the user before
   moving on.
 - **The user drives the pace.** Some sessions may only cover one
-  phase. That's fine — the GitHub issues preserve state between
+  phase. That's fine — the tracker preserves state between
   sessions. Pick up where you left off.
 - **Adapt to context.** If the user already has a PRD, skip to
-  Phase 3. If issues already exist, skip to Phase 4. Ask the user
+  Phase 3. If items already exist, skip to Phase 4. Ask the user
   where they are if unclear.

@@ -1,83 +1,77 @@
 ---
 name: triage-issues
-description: Review the dependency graph of issues from a PRD, update their blocked/ready status, and recommend which issue to work on next. Use when user wants to triage issues, check what's unblocked, update issue status, or find the next thing to work on.
+description: Review the dependency graph of work items from a PRD, update their blocked/ready status, and recommend which item to work on next. Use when user wants to triage issues, check what's unblocked, update item status, or find the next thing to work on.
 ---
 
-# Triage Issues
+# Triage Work Items
 
-Walk the dependency graph of issues spawned from a PRD, reconcile
+Walk the dependency graph of work items spawned from a PRD, reconcile
 their status against reality, and recommend what to work on next.
+
+## Tracker selection
+
+If a tracker has not already been chosen in this conversation, ask the
+user which tracker to use: **github**, **jira**, or **local**.
+
+Then read the corresponding resource file for backend-specific commands:
+- GitHub: [tracker-github.md](../_resources/tracker-github.md)
+- Jira: [tracker-jira.md](../_resources/tracker-jira.md)
+- Local: [tracker-local.md](../_resources/tracker-local.md)
 
 ## Process
 
-### 1. Gather the issues
-Ask the user for the parent PRD issue number (or a milestone/label
-to filter by). Fetch the PRD with `gh issue view <number>`.
+### 1. Gather the work items
+Ask the user for the parent PRD identifier (issue number, ticket key,
+or local plan directory). Fetch the PRD using the tracker instructions.
 
-Fetch sub-issues of the PRD using the GraphQL API:
-```
-gh api graphql -f query='query {
-  repository(owner: "<owner>", name: "<repo>") {
-    issue(number: <prd-number>) {
-      subIssues(first: 100) {
-        nodes { number title state labels(first: 10) { nodes { name } } }
-      }
-    }
-  }
-}'
-```
+Fetch all child items of the PRD using the tracker instructions.
 
 ### 2. Fetch dependency status
-For each child issue, fetch it with `gh issue view <number>` and
-parse its "Blocked by" section. Check whether each blocker is open
-or closed.
+For each child item, fetch it and parse its "Blocked by" section.
+Check whether each blocker is resolved.
 
-Classify every issue into one of:
-- **Done** — issue is closed
-- **In Progress** — issue is open and has an `in-progress` label or
-  an associated open PR
-- **Ready** — issue is open and all blockers are closed (or has no
+Classify every item into one of:
+- **Done** — item is closed/completed
+- **In Progress** — item is open and actively being worked on
+- **Ready** — item is open and all blockers are resolved (or has no
   blockers)
-- **Blocked** — issue is open and at least one blocker is still open
+- **Blocked** — item is open and at least one blocker is still unresolved
 
 ### 3. Present the status overview
 Display a table or grouped list:
 
 ```
 Done:
-  - #12 Set up database schema ✓
+  - Set up database schema
 
 Ready (can start now):
-  - #14 Add API endpoint for widget creation
-    (was blocked by #12, now resolved)
+  - Add API endpoint for widget creation
+    (was blocked by schema setup, now resolved)
 
 In Progress:
-  - #13 Auth middleware refactor
+  - Auth middleware refactor
 
 Blocked:
-  - #15 Frontend widget form
-    blocked by #13 (still open), #14 (still open)
+  - Frontend widget form
+    blocked by auth refactor (still open), API endpoint (still open)
 ```
 
-Call out any issues whose status has changed since they were last
-updated (e.g. a blocker closed but the issue still has a `blocked`
-label).
+Call out any items whose status has changed since they were last
+updated.
 
-### 4. Update labels
-Propose label changes to reflect current reality:
-- Add `ready` and remove `blocked` for newly unblocked issues
-- Add `blocked` for issues with open blockers that aren't labeled
+### 4. Update status
+Propose status changes to reflect current reality:
+- Mark newly unblocked items as `ready`
+- Mark items with open blockers as `blocked`
 
-Ask the user to confirm before applying. Apply with:
-```
-gh issue edit <number> --add-label <label> --remove-label <label>
-```
+Ask the user to confirm before applying. Apply using the tracker
+instructions.
 
-### 5. Recommend next issue
-Suggest which ready issue to pick up next, considering:
-- Dependency order — prefer issues that unblock the most other work
+### 5. Recommend next item
+Suggest which ready item to pick up next, considering:
+- Dependency order — prefer items that unblock the most other work
 - Slice type — prefer AFK slices the user can hand off to Claude
 - Complexity — if multiple are equivalent, suggest the simplest first
 
 Ask the user if they want to jump straight into `/work-issue` with
-the recommended issue.
+the recommended item.

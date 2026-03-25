@@ -1,26 +1,35 @@
 ---
 name: prd-to-issues
-description: Break a PRD into independently-grabbable GitHub issues using tracer-bullet vertical slices. Use when user wants to convert a PRD to issues, create implementation tickets, or break down a PRD into work items.
+description: Break a PRD into independently-grabbable work items using tracer-bullet vertical slices. Use when user wants to convert a PRD to work items, create implementation tickets, or break down a PRD into tasks.
 ---
 
-# PRD to Issues
+# PRD to Work Items
 
-Break a PRD into independently-grabbable GitHub issues using vertical
+Break a PRD into independently-grabbable work items using vertical
 slices (tracer bullets).
+
+## Tracker selection
+
+If a tracker has not already been chosen in this conversation, ask the
+user which tracker to use: **github**, **jira**, or **local**.
+
+Then read the corresponding resource file for backend-specific commands:
+- GitHub: [tracker-github.md](../_resources/tracker-github.md)
+- Jira: [tracker-jira.md](../_resources/tracker-jira.md)
+- Local: [tracker-local.md](../_resources/tracker-local.md)
 
 ## Process
 
 ### 1. Locate the PRD
-Ask the user for the PRD GitHub issue number (or URL).
-If the PRD is not already in your context window, fetch it with
-`gh issue view <number>` (with comments).
+Ask the user for the PRD identifier (issue number, ticket key, or
+local plan directory). Fetch the PRD using the tracker instructions.
 
 ### 2. Explore the codebase (optional)
 If you have not already explored the codebase, do so to understand
 the current state of the code.
 
 ### 3. Draft vertical slices
-Break the PRD into tracer bullet issues. Each issue is a thin
+Break the PRD into tracer bullet work items. Each item is a thin
 vertical slice that cuts through ALL integration layers end-to-end,
 NOT a horizontal slice of one layer.
 
@@ -51,12 +60,12 @@ Ask the user:
 
 Iterate until the user approves the breakdown.
 
-### 5. Create the GitHub issues as sub-issues
-For each approved slice, create using `gh issue create`.
-Create in dependency order (blockers first) so you can reference
-real issue numbers.
+### 5. Create the work items
+For each approved slice, create a work item using the tracker
+instructions. Create in dependency order (blockers first) so you
+can reference real identifiers.
 
-<issue-template>
+<item-template>
 ## What to build
 A concise description of this vertical slice. Describe the
 end-to-end behavior, not layer-by-layer implementation.
@@ -68,41 +77,17 @@ duplicating content.
 - [ ] Criterion 2
 
 ## Blocked by
-- Blocked by #<issue-number> (if any)
+- Blocked by <item-identifier> (if any)
 Or "None - can start immediately"
 
 ## User stories addressed
 Reference by number from the parent PRD:
 - User story 3
 - User story 7
-</issue-template>
+</item-template>
 
-### 6. Link as sub-issues
-After creating each issue, link it as a sub-issue of the PRD
-using the GitHub GraphQL API.
+### 6. Link as children
+After creating each work item, link it as a child of the PRD
+using the tracker instructions.
 
-First, get the node IDs:
-```
-gh api graphql -f query='query {
-  repository(owner: "<owner>", name: "<repo>") {
-    issue(number: <prd-number>) { id }
-  }
-}'
-```
-
-Then for each child issue, add it as a sub-issue:
-```
-gh api graphql -f query='mutation {
-  addSubIssue(input: {
-    issueId: "<parent-node-id>"
-    subIssueId: "<child-node-id>"
-  }) {
-    issue { id }
-  }
-}'
-```
-
-This gives the PRD a native sub-issue list in GitHub's UI —
-no manual tracking needed.
-
-Do NOT close the parent PRD issue.
+Do NOT close the parent PRD item.
