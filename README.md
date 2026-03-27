@@ -12,6 +12,7 @@ dotclaude/
     ah:discuss-feature/SKILL.md
     ah:write-prd/SKILL.md
     ah:slice-prd/SKILL.md
+    ah:research-prd/SKILL.md
     ah:triage/SKILL.md
     ah:work-issue/SKILL.md
     ah:create-pr/SKILL.md
@@ -39,7 +40,7 @@ Full delivery pipeline from rough idea to merged PRs. Walks through each phase i
 
 ```
 /ah:new-feature
-  → ah:discuss-feature → ah:write-prd → ah:slice-prd → ah:triage ↔ ah:work-issue
+  → ah:discuss-feature → ah:write-prd → ah:research-prd → ah:slice-prd → ah:triage ↔ ah:work-issue
 ```
 
 ### ah:discuss-feature
@@ -47,6 +48,9 @@ Interview the user relentlessly about a plan or design until reaching shared und
 
 ### ah:write-prd
 Create a PRD through user interview, codebase exploration, and module design, then submit as a work item.
+
+### ah:research-prd
+Research a PRD by exploring related code, searching the web for best practices, and giving concrete feedback on the proposed approach. Sits between PRD creation and slicing.
 
 ### ah:slice-prd
 Break a PRD into independently-grabbable work items using tracer-bullet vertical slices.

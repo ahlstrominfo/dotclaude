@@ -39,14 +39,22 @@ modules, and create the PRD as a work item.
 
 When the PRD is created, note its identifier and proceed to Phase 3.
 
-### Phase 3: Work Item Breakdown
+### Phase 3: Research & Validate
+Use the **ah:research-prd** skill to validate the PRD's approach.
+This will explore related code in the codebase, search the web for
+best practices and how others solve similar problems, and give
+concrete feedback on the proposed solution.
+
+Update the PRD based on findings, then proceed to Phase 4.
+
+### Phase 4: Work Item Breakdown
 Use the **ah:slice-prd** skill to break the PRD into vertical
 slice work items. This will draft thin end-to-end slices, quiz the
 user on the breakdown, and create the items in dependency order.
 
 When all items are created, proceed to Phase 4.
 
-### Phase 4: Triage and Work Loop
+### Phase 5: Triage and Work Loop
 This is the iterative phase. Repeat until all items are done:
 
 1. Use the **ah:triage** skill to review the dependency graph,
