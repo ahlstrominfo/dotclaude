@@ -1,5 +1,5 @@
 ---
-name: create-pr
+name: ah:create-pr
 description: Create a GitHub pull request that matches the repo's existing PR style, tone, and conventions. Analyzes recent PRs and any PR template before writing. Use when user wants to open a PR, create a pull request, or submit their work for review.
 ---
 

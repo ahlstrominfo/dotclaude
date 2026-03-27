@@ -58,5 +58,5 @@ Branch, implement acceptance criteria one by one, write tests,
 verify they pass. Keep commits atomic.
 
 ### 7. Open a PR
-Use the **create-pr** skill. Reference the work item identifier
+Use the **ah:create-pr** skill. Reference the work item identifier
 so the PR links back to it (e.g., "Closes #<number>" for GitHub).

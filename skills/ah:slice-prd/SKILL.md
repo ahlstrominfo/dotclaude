@@ -1,5 +1,5 @@
 ---
-name: prd-to-issues
+name: ah:slice-prd
 description: Break a PRD into independently-grabbable work items using tracer-bullet vertical slices. Use when user wants to convert a PRD to work items, create implementation tickets, or break down a PRD into tasks.
 ---
 

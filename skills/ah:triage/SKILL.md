@@ -73,5 +73,5 @@ Suggest which ready item to pick up next, considering:
 - Slice type — prefer AFK slices the user can hand off to Claude
 - Complexity — if multiple are equivalent, suggest the simplest first
 
-Ask the user if they want to jump straight into `/work-issue` with
+Ask the user if they want to jump straight into `/ah:work-issue` with
 the recommended item.

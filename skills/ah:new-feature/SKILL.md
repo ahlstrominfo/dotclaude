@@ -1,5 +1,5 @@
 ---
-name: feature
+name: ah:new-feature
 description: Orchestrate the full feature delivery pipeline from rough idea to merged PRs. Walks the user through design interrogation, PRD creation, issue breakdown, triage, and implementation. Use when user wants to build a feature end-to-end, start a new feature from scratch, or run the full delivery pipeline.
 ---
 
@@ -25,7 +25,7 @@ invoking sub-skills. Tell each sub-skill which tracker is in use.
 ## Pipeline
 
 ### Phase 1: Design Interrogation
-Use the **grill-me** skill to interview the user about their idea.
+Use the **ah:discuss-feature** skill to interview the user about their idea.
 The goal is to reach a shared understanding of the problem and
 solution before writing anything down formally.
 
@@ -33,14 +33,14 @@ When the user is satisfied that the idea is well-understood,
 proceed to Phase 2.
 
 ### Phase 2: PRD Creation
-Use the **write-a-prd** skill to formalize the design into a PRD.
+Use the **ah:write-prd** skill to formalize the design into a PRD.
 This will interview the user further, explore the codebase, sketch
 modules, and create the PRD as a work item.
 
 When the PRD is created, note its identifier and proceed to Phase 3.
 
 ### Phase 3: Work Item Breakdown
-Use the **prd-to-issues** skill to break the PRD into vertical
+Use the **ah:slice-prd** skill to break the PRD into vertical
 slice work items. This will draft thin end-to-end slices, quiz the
 user on the breakdown, and create the items in dependency order.
 
@@ -49,10 +49,10 @@ When all items are created, proceed to Phase 4.
 ### Phase 4: Triage and Work Loop
 This is the iterative phase. Repeat until all items are done:
 
-1. Use the **triage-issues** skill to review the dependency graph,
+1. Use the **ah:triage** skill to review the dependency graph,
    update statuses, and identify which items are ready to work on.
 
-2. When a ready item is identified, use the **work-issue** skill
+2. When a ready item is identified, use the **ah:work-issue** skill
    to implement it — branch, code, test, commit, and open a PR.
 
 3. After the PR is opened, loop back to step 1 to re-triage.
